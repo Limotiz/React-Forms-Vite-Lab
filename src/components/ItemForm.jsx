@@ -1,29 +1,53 @@
 import React, { useState } from "react";
-import Item from "./Item";
-import ItemForm from "./ItemForm";
+import { v4 as uuid } from "uuid";
 
-function ShoppingList({ items }) {
-  const [shoppingItems, setShoppingItems] = useState(items);
+function ItemForm({ onItemFormSubmit = () => {} }) {
+  const [itemName, setItemName] = useState("");
+  const [itemCategory, setItemCategory] = useState("Produce");
 
-  function handleAddItem(newItem) {
-    setShoppingItems((prevItems) => [...prevItems, newItem]);
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const newItem = {
+      id: uuid(),
+      name: itemName,
+      category: itemCategory,
+    };
+
+    onItemFormSubmit(newItem);
+
+    setItemName("");
+    setItemCategory("Produce");
   }
 
   return (
-    <div>
-      <ItemForm onItemFormSubmit={handleAddItem} />
+    <form className="NewItem" onSubmit={handleSubmit}>
+      <label>
+        Name:
+        <input
+          type="text"
+          name="name"
+          value={itemName}
+          onChange={(e) => setItemName(e.target.value)}
+        />
+      </label>
 
-      <ul>
-        {shoppingItems.map((item) => (
-          <Item
-            key={item.id}
-            name={item.name}
-            category={item.category}
-          />
-        ))}
-      </ul>
-    </div>
+      <label>
+        Category:
+        <select
+          name="category"
+          value={itemCategory}
+          onChange={(e) => setItemCategory(e.target.value)}
+        >
+          <option value="Produce">Produce</option>
+          <option value="Dairy">Dairy</option>
+          <option value="Dessert">Dessert</option>
+        </select>
+      </label>
+
+      <button type="submit">Add to List</button>
+    </form>
   );
 }
 
-export default ShoppingList;
+export default ItemForm;
