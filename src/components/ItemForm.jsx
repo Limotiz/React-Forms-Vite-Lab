@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 
-function ItemForm({ onItemFormSubmit }) {
+function ItemForm({ onItemFormSubmit = () => {} }) {
   const [itemName, setItemName] = useState("");
-  const [itemCategory, setItemCategory] = useState("Produce"); // initial value required
+  const [itemCategory, setItemCategory] = useState("Produce");
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -16,7 +16,6 @@ function ItemForm({ onItemFormSubmit }) {
 
     onItemFormSubmit(newItem);
 
-    // reset form
     setItemName("");
     setItemCategory("Produce");
   }
